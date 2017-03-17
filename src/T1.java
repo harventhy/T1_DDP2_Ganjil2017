@@ -26,8 +26,9 @@ public class T1 {
             if (perintah.equalsIgnoreCase("init")) {
                 try {
                     int jumlahTim = Integer.parseInt(st.nextToken());
-                    game.initGame(jumlahTim);
-                    game.initLiga();
+                    if (game.initGame(jumlahTim)) {
+                        game.initLiga();
+                    }
                 } catch (NoSuchElementException E) {
                     System.out.println("ERROR: Argumen untuk perintah " + perintah + " tidak valid.");
                 }
