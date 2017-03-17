@@ -67,8 +67,8 @@ public class Game {
             System.out.println("ERROR: Game sudah di-init, init gagal!");
             return false;
         }
-        if (jumlahTim < 4) {
-            System.out.println("ERROR: Jumlah tim minimal 4 tim.");
+        if (jumlahTim < 4 || jumlahTim > 16) {
+            System.out.println("ERROR: Jumlah tim minimal 4 tim dan maksimal 16 tim.");
             return false;
         }
         initialized = true;
