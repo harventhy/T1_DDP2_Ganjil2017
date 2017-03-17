@@ -85,6 +85,6 @@ public class T1 {
                 System.out.println("ERROR: Game belum di-init, silakan init terlebih dahulu dengan perintah: init [jumlahTim]");
             }
         }
-        System.out.println("SAMPAI BERTEMU DI CS LEAGUE MUSIM BERIKUTNYA!");
+        System.out.println("\nSAMPAI BERTEMU DI CS LEAGUE MUSIM BERIKUTNYA!");
     }
 }

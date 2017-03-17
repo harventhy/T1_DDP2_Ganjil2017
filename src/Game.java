@@ -53,9 +53,9 @@ public class Game {
         if (liga.isFinished()) {
             System.out.println("\nCS LEAGUE MUSIM INI TELAH USAI!");
             System.out.println("\nCHAMPION: Tim " + liga.getJuara());
-            System.out.println("\nKLASEMEN AKHIR\n");
+            System.out.println("\nKLASEMEN AKHIR:\n");
             showKlasemen();
-            System.out.println("\nTOP SCORE\n");
+            System.out.println("\nTOP SCORE:\n");
             showPencetakGol();
             return true;
         }
