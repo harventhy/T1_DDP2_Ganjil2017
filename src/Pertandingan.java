@@ -34,8 +34,8 @@ public class Pertandingan {
         System.out.println("  Kartu kuning: " + timDua.getKartuKuningPertandingan());
         System.out.println("  Kartu merah: " + timDua.getKartuMerahPertandingan());
 
-        timSatu.clearStatistikPertandingan();
-        timDua.clearStatistikPertandingan();
+        timSatu.applyStatistikPertandingan();
+        timDua.applyStatistikPertandingan();
     }
 
     public String toString() {

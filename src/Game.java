@@ -163,27 +163,29 @@ public class Game {
                 return;
             }
 
+            Pemain pemain = timMain.getPemain(nomorPemain);
+            if (pemain == null) {
+                System.out.println("ERROR: Tidak ada pemain nomor " + nomorPemain + " di Tim " + namaTim + "!");
+                timMain.resetStatistikPertandingan();
+                timLawan.resetStatistikPertandingan();
+                return;
+            }
+            if (pemain.isKenaKartuMerah()) {
+                System.out.println("ERROR: Pemain dengan nomor " + nomorPemain + " sudah terkena kartu merah!");
+                timMain.resetStatistikPertandingan();
+                timLawan.resetStatistikPertandingan();
+                return;
+            }
+
             if (arg.equalsIgnoreCase("-g")) {
-                if (!timMain.cetakGol(nomorPemain)) {
-                    System.out.println("ERROR: Tidak ada pemain nomor " + nomorPemain + " di Tim " + namaTim + "!");
-                    return;
-                }
+                timMain.cetakGol(pemain);
                 timLawan.kebobolan(1);
             } else if (arg.equalsIgnoreCase("-p")) {
-                if (!timMain.pelanggaran(nomorPemain)) {
-                    System.out.println("ERROR: Tidak ada pemain nomor " + nomorPemain + " di Tim " + namaTim + "!");
-                    return;
-                }
+                timMain.pelanggaran(pemain);
             } else if (arg.equalsIgnoreCase("-kk")) {
-                if (!timMain.kartuKuning(nomorPemain)) {
-                    System.out.println("ERROR: Tidak ada pemain nomor " + nomorPemain + " di Tim " + namaTim + "!");
-                    return;
-                }
+                timMain.kartuKuning(pemain);
             } else if (arg.equalsIgnoreCase("-km")) {
-                if (!timMain.kartuMerah(nomorPemain)) {
-                    System.out.println("ERROR: Tidak ada pemain nomor " + nomorPemain + " di Tim " + namaTim + "!");
-                    return;
-                }
+                timMain.kartuMerah(pemain);
             }
         }
 
@@ -217,7 +219,7 @@ public class Game {
     }
 
     public void showNextGame() {
-        liga.checkPertandinganBerikutnya();
+        liga.lihatPertandinganBerikutnya();
     }
 
     public void showKlasemen() {

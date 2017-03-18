@@ -23,11 +23,20 @@ public class Liga {
         this.pemain = new Pemain[tim.length * 5];
         for (int i = 0; i < tim.length; i++) {
             for (int j = 0; j < 5; j++) {
-                pemain[i * 5 + j] = tim[i].getPemain()[j];
+                pemain[i * 5 + j] = tim[i].getDaftarPemain()[j];
             }
         }
         this.showKlasemenHeader = createShowKlasemenHeader();
         this.showPencetakGolHeader = createShowPencetakGolHeader();
+    }
+
+    public Tim cariTim(String namaTim) {
+        for (Tim t : tim) {
+            if (t.getNamaTim().equals(namaTim)) {
+                return t;
+            }
+        }
+        return null;
     }
 
     public void acakPertandingan() {
@@ -51,7 +60,7 @@ public class Liga {
         return false;
     }
 
-    public void checkPertandinganBerikutnya() {
+    public void lihatPertandinganBerikutnya() {
         System.out.println(pertandingan.get(0));
     }
 
@@ -66,15 +75,6 @@ public class Liga {
 
     public String getJuara() {
         return tim[0].getNamaTim();
-    }
-
-    public Tim cariTim(String namaTim) {
-        for (Tim t : tim) {
-            if (t.getNamaTim().equals(namaTim)) {
-                return t;
-            }
-        }
-        return null;
     }
 
     public void printKlasemen() {
@@ -125,7 +125,7 @@ public class Liga {
             String peringkat = StringUtils.center(i + 1, SHOW_PENCETAKGOL_PADDING[0]);
             String pemain = StringUtils.left(p.getNamaPemain(), SHOW_PENCETAKGOL_PADDING[1]);
             String tim = StringUtils.left(p.getNamaTim(), SHOW_PENCETAKGOL_PADDING[2]);
-            String gol = StringUtils.center(p.getGolDicetak(), SHOW_PENCETAKGOL_PADDING[3]);
+            String gol = StringUtils.center(p.getTotalGol(), SHOW_PENCETAKGOL_PADDING[3]);
 
             String data = peringkat + " | " + pemain + " | " + tim + " | " + gol;
             System.out.println(data);

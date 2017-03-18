@@ -13,8 +13,7 @@ public class Tim implements Comparable<Tim> {
     private int jumlahSeri;
     private int jumlahGol;
     private int jumlahKebobolan;
-    private int[] statistikPertandingan;
-
+    private int kebobolan;
     private final int[] SHOW_TIM_PADDING = {7, 9, 5, 13, 14, 13};
     private String showTimHeader = "";
 
@@ -22,14 +21,13 @@ public class Tim implements Comparable<Tim> {
         namaTim = nama;
         this.pemain = pemain;
         showTimHeader = createShowTimHeader();
-        statistikPertandingan = new int[4]; // {gol, foul, kk, km}
     }
 
     public String getNamaTim() {
         return namaTim;
     }
 
-    public Pemain[] getPemain() {
+    public Pemain[] getDaftarPemain() {
         return pemain;
     }
 
@@ -38,7 +36,7 @@ public class Tim implements Comparable<Tim> {
     }
 
     public void kebobolan(int jumlahGol) {
-        jumlahKebobolan += jumlahGol;
+        kebobolan += jumlahGol;
     }
 
     public void menang() {
@@ -82,33 +80,66 @@ public class Tim implements Comparable<Tim> {
     }
 
     public int getGolPertandingan() {
-        return statistikPertandingan[0];
+        int totalGol = 0;
+        for (Pemain p : pemain) {
+            totalGol += p.getGolPertandingan();
+        }
+        return totalGol;
     }
 
     public int getPelanggaranPertandingan() {
-        return statistikPertandingan[1];
+        int totalPelanggaran = 0;
+        for (Pemain p : pemain) {
+            totalPelanggaran += p.getPelanggaranPertandingan();
+        }
+        return totalPelanggaran;
     }
 
     public int getKartuKuningPertandingan() {
-        return statistikPertandingan[2];
+        int totalKK = 0;
+        for (Pemain p : pemain) {
+            totalKK += p.getKKPertandingan();
+        }
+        return totalKK;
     }
 
     public int getKartuMerahPertandingan() {
-        return statistikPertandingan[3];
+        int totalKM = 0;
+        for (Pemain p : pemain) {
+            totalKM += p.getKMPertandingan();
+        }
+        return totalKM;
     }
 
-    public void clearStatistikPertandingan() {
-        statistikPertandingan = new int[4];
+    public void applyStatistikPertandingan() {
+        jumlahKebobolan += kebobolan;
+        for (Pemain p : pemain) {
+            p.applyPertandingan();
+        }
+        resetStatistikPertandingan();
     }
 
-    public boolean cetakGol(int nomorPemain) {
-        for (Pemain p : getPemain()) {
+    public void resetStatistikPertandingan() {
+        kebobolan = 0;
+        for (Pemain p : pemain) {
+            p.resetPertandingan();
+        }
+    }
+
+    public Pemain getPemain(int nomorPemain) {
+        for (Pemain p : pemain) {
             if (p.getNomorPemain() == nomorPemain) {
-                p.cetakGol();
-                gol();
-                statistikPertandingan[0]++;
-                return true;
+                return p;
             }
+        }
+        return null;
+    }
+
+    public boolean cetakGol(Pemain p) {
+        if (!p.isKenaKartuMerah()) {
+            p.cetakGol();
+            gol();
+            return true;
         }
         return false;
     }
@@ -118,19 +149,19 @@ public class Tim implements Comparable<Tim> {
         while (jumlahGol-- > 0) {
             int pencetakGolIdx = random.nextInt(5);
             Pemain pencetakGol = pemain[pencetakGolIdx];
-            pencetakGol.cetakGol();
-            gol();
-            statistikPertandingan[0]++;
+
+            while(pencetakGol.isKenaKartuMerah()) {
+                pencetakGolIdx = random.nextInt(5);
+                pencetakGol = pemain[pencetakGolIdx];
+            }
+            cetakGol(pencetakGol);
         }
     }
 
-    public boolean pelanggaran(int nomorPemain) {
-        for (Pemain p : getPemain()) {
-            if (p.getNomorPemain() == nomorPemain) {
-                p.pelanggaran();
-                statistikPertandingan[1]++;
-                return true;
-            }
+    public boolean pelanggaran(Pemain p) {
+        if (!p.isKenaKartuMerah()) {
+            p.pelanggaran();
+            return true;
         }
         return false;
     }
@@ -139,20 +170,20 @@ public class Tim implements Comparable<Tim> {
         Random random = new Random();
         while (jumlahPelanggaran-- > 0) {
             int pelanggarIdx = random.nextInt(5);
-            Pemain pencetakGol = pemain[pelanggarIdx];
-            pencetakGol.pelanggaran();
-            statistikPertandingan[1]++;
+            Pemain pelanggar = pemain[pelanggarIdx];
+
+            while(pelanggar.isKenaKartuMerah()) {
+                pelanggarIdx = random.nextInt(5);
+                pelanggar = pemain[pelanggarIdx];
+            }
+            pelanggaran(pelanggar);
         }
     }
 
-    public boolean kartuKuning(int nomorPemain) {
-        for (Pemain p : getPemain()) {
-            if (p.getNomorPemain() == nomorPemain) {
-                p.kartuKuning();
-                statistikPertandingan[1]++;
-                statistikPertandingan[2]++;
-                return true;
-            }
+    public boolean kartuKuning(Pemain p) {
+        if (!p.isKenaKartuMerah()) {
+            p.kartuKuning();
+            return true;
         }
         return false;
     }
@@ -161,21 +192,20 @@ public class Tim implements Comparable<Tim> {
         Random random = new Random();
         while (jumlahKK-- > 0) {
             int kartuKuningIdx = random.nextInt(5);
-            Pemain pencetakGol = pemain[kartuKuningIdx];
-            pencetakGol.kartuKuning();
-            statistikPertandingan[1]++;
-            statistikPertandingan[2]++;
+            Pemain kk = pemain[kartuKuningIdx];
+
+            while(kk.isKenaKartuMerah()) {
+                kartuKuningIdx = random.nextInt(5);
+                kk = pemain[kartuKuningIdx];
+            }
+            kartuKuning(kk);
         }
     }
 
-    public boolean kartuMerah(int nomorPemain) {
-        for (Pemain p : getPemain()) {
-            if (p.getNomorPemain() == nomorPemain) {
-                p.kartuMerah(true);
-                statistikPertandingan[1]++;
-                statistikPertandingan[3]++;
-                return true;
-            }
+    public boolean kartuMerah(Pemain p) {
+        if (!p.isKenaKartuMerah()) {
+            p.kartuMerah(true);
+            return true;
         }
         return false;
     }
@@ -184,10 +214,13 @@ public class Tim implements Comparable<Tim> {
         Random random = new Random();
         while (jumlahKM-- > 0) {
             int kartuMerahIdx = random.nextInt(5);
-            Pemain pencetakGol = pemain[kartuMerahIdx];
-            pencetakGol.kartuMerah(true);
-            statistikPertandingan[1]++;
-            statistikPertandingan[3]++;
+            Pemain km = pemain[kartuMerahIdx];
+
+            while(km.isKenaKartuMerah()) {
+                kartuMerahIdx = random.nextInt(5);
+                km = pemain[kartuMerahIdx];
+            }
+            kartuMerah(km);
         }
     }
 
@@ -210,19 +243,17 @@ public class Tim implements Comparable<Tim> {
             }
             System.out.println("ERROR: Pemain dengan nama " + namaAtauNomorPemain + " bukan anggota dari tim " + namaTim + "!");
         }
-
     }
 
     public void printShowTim() {
         System.out.println(showTimHeader);
-
         for (Pemain p : pemain) {
             String nomor = StringUtils.center(p.getNomorPemain(), SHOW_TIM_PADDING[0]);
             String nama = StringUtils.left(p.getNamaPemain(), SHOW_TIM_PADDING[1]);
-            String gol = StringUtils.center(p.getGolDicetak(), SHOW_TIM_PADDING[2]);
-            String foul = StringUtils.center(p.getJumlahPelanggaran(), SHOW_TIM_PADDING[3]);
-            String kk = StringUtils.center(p.getJumlahKartuKuning(), SHOW_TIM_PADDING[4]);
-            String km = StringUtils.center(p.getJumlahKartuMerah(), SHOW_TIM_PADDING[5]);
+            String gol = StringUtils.center(p.getTotalGol(), SHOW_TIM_PADDING[2]);
+            String foul = StringUtils.center(p.getTotalPelanggaran(), SHOW_TIM_PADDING[3]);
+            String kk = StringUtils.center(p.getTotalKartuKuning(), SHOW_TIM_PADDING[4]);
+            String km = StringUtils.center(p.getTotalKartuMerah(), SHOW_TIM_PADDING[5]);
 
             String data = nomor + " | " + nama + " | " + gol + " | " + foul + " | " + kk + " | " + km;
             System.out.println(data);

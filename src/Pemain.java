@@ -7,46 +7,41 @@ public class Pemain implements Comparable<Pemain>{
     private int nomerPemain;
     private String namaPemain;
     private String namaTim;
-    private int jumlahGol;
-    private int jumlahPelanggaran;
-    private int jumlahKK;
-    private int jumlahKM;
+    private int totalGol = 0;
+    private int totalPelanggaran = 0;
+    private int totalKK = 0;
+    private int totalKM = 0;
+    private boolean isKenaKM = false;
+    private int golPertandingan = 0;
+    private int pelanggaranPertandingan = 0;
+    private int kkPertandingan = 0;
+    private int kmPertandingan = 0;
 
     public Pemain (int no, String nama, String t) {
         nomerPemain = no;
         namaPemain = nama;
         namaTim = t;
-        jumlahGol = 0;
-        jumlahPelanggaran = 0;
-        jumlahKK = 0;
-        jumlahKM = 0;
-    }
-
-    public void reset() {
-        jumlahGol = 0;
-        jumlahPelanggaran = 0;
-        jumlahKK = 0;
-        jumlahKM = 0;
     }
 
     public void cetakGol() {
-        jumlahGol++;
+        golPertandingan++;
     }
 
     public void pelanggaran() {
-        jumlahPelanggaran++;
+        pelanggaranPertandingan++;
     }
 
     public void kartuKuning() {
-        jumlahKK++;
+        kkPertandingan++;
         pelanggaran();
-        if (jumlahKK % 2 == 0) {
+        if (kkPertandingan % 2 == 0) {
             kartuMerah(false);
         }
     }
 
     public void kartuMerah(boolean kartuMerahLangsung) {
-        jumlahKM++;
+        kmPertandingan++;
+        isKenaKM = true;
         if (kartuMerahLangsung) {
             pelanggaran();
         }
@@ -64,42 +59,77 @@ public class Pemain implements Comparable<Pemain>{
         return namaTim;
     }
 
-    public int getGolDicetak() {
-        return jumlahGol;
+    public int getTotalGol() {
+        return totalGol;
     }
 
-    public int getJumlahPelanggaran() {
-        return jumlahPelanggaran;
+    public int getTotalPelanggaran() {
+        return totalPelanggaran;
     }
 
-    public int getJumlahKartuKuning() {
-        return jumlahKK;
+    public int getTotalKartuKuning() {
+        return totalKK;
     }
 
-    public int getJumlahKartuMerah() {
-        return jumlahKM;
+    public int getTotalKartuMerah() {
+        return totalKM;
+    }
+
+    public int getGolPertandingan() {
+        return golPertandingan;
+    }
+
+    public int getPelanggaranPertandingan() {
+        return pelanggaranPertandingan;
+    }
+
+    public int getKKPertandingan() {
+        return kkPertandingan;
+    }
+
+    public int getKMPertandingan() {
+        return kmPertandingan;
+    }
+
+    public boolean isKenaKartuMerah() {
+        return isKenaKM;
+    }
+
+    public void applyPertandingan() {
+        totalGol += golPertandingan;
+        totalPelanggaran += pelanggaranPertandingan;
+        totalKK += kkPertandingan;
+        totalKM += kmPertandingan;
+    }
+
+    public void resetPertandingan() {
+        golPertandingan = 0;
+        pelanggaranPertandingan = 0;
+        kkPertandingan = 0;
+        kkPertandingan = 0;
+        isKenaKM = false;
     }
 
     public String toString() {
         return "Nomor: " + getNomorPemain() + "\n" +
                 "Nama: " + getNamaPemain() + "\n" +
-                "Gol: " + getGolDicetak() + "\n" +
-                "Pelanggaran: " + getJumlahPelanggaran() + "\n" +
-                "Kartu kuning: " + getJumlahKartuKuning() + "\n" +
-                "Kartu merah: " + getJumlahKartuMerah();
+                "Gol: " + getTotalGol() + "\n" +
+                "Pelanggaran: " + getTotalPelanggaran() + "\n" +
+                "Kartu kuning: " + getTotalKartuKuning() + "\n" +
+                "Kartu merah: " + getTotalKartuMerah();
     }
 
     @Override
     public int compareTo(Pemain pemainLain) {
-        if (this.getGolDicetak() == pemainLain.getGolDicetak()) {
-            if (this.getJumlahPelanggaran() == pemainLain.getJumlahPelanggaran()) {
-                if (this.getJumlahKartuKuning() == pemainLain.getJumlahKartuKuning()) {
-                    return this.getJumlahKartuMerah() - pemainLain.getJumlahKartuMerah();
+        if (this.getTotalGol() == pemainLain.getTotalGol()) {
+            if (this.getTotalPelanggaran() == pemainLain.getTotalPelanggaran()) {
+                if (this.getTotalKartuKuning() == pemainLain.getTotalKartuKuning()) {
+                    return this.getTotalKartuMerah() - pemainLain.getTotalKartuMerah();
                 }
-                return this.getJumlahKartuKuning() - pemainLain.getJumlahKartuKuning();
+                return this.getTotalKartuKuning() - pemainLain.getTotalKartuKuning();
             }
-            return this.getJumlahPelanggaran() - pemainLain.getJumlahPelanggaran();
+            return this.getTotalPelanggaran() - pemainLain.getTotalPelanggaran();
         }
-        return pemainLain.getGolDicetak() - this.getGolDicetak();
+        return pemainLain.getTotalGol() - this.getTotalGol();
     }
 }
